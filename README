@@ -1,0 +1,2 @@
+A starting point for importing and exporting Blender (http://www.blender.org)
+markers from Blender's timeline. It uses a new plaintext filetype (.bmf).
