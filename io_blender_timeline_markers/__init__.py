@@ -65,7 +65,7 @@ from bpy.props import (StringProperty,
 
 class ImportMarkers(Operator, ImportHelper):
     '''Import Blender timeline markers from file. '''
-    bl_idname = "marker.export"
+    bl_idname = "marker.import"
     bl_label = "Import Blender timeline markers from file"
 
     filename_ext = ".bmf"
@@ -120,14 +120,14 @@ class ExportMarkers(Operator, ExportHelper):
 
 class MT_ImportExportMarkers(Menu):
     bl_label = "Marker Import / Export"
-    bl_idname = "marker_import_export"
+#    bl_idname = "marker_import_export"
 
     def draw(self, context):
         self.layout.operator(ImportMarkers.bl_idname, text="Import Blender BMF (.bmf)")
         self.layout.operator(ExportMarkers.bl_idname, text="Export Blender BMF (.bmf)")
 
 def menu_importexport(self, context):
-    self.layout.menu(MT_ImportExportMarkers.bl_idname)
+    self.layout.menu("MT_ImportExportMarkers")
 
 def register():
     bpy.utils.register_class(ImportMarkers)

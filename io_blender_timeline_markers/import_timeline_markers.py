@@ -38,10 +38,14 @@ def read_markers(context, filepath): # , z_up, rot_ord, sensor_width, sensor_hei
     # read the file
     filehandle = open(filepath, 'r')
 
-
-
-    # iterate throug the files lines
-#    for line in filehandle:
+    currentline = filehandle.readline().rstrip('\r\n')
+    
+    # iterate through the files lines
+    while currentline:
+        marker = markers.new(currentline)
+        marker.frame = int(filehandle.readline().rstrip('\r\n'))
+        currentline = filehandle.readline().rstrip('\r\n')
+        
         # reset the target objects matrix
         # (the one from whitch one we'll extract the final transforms)
 #        m_trans_mat = Matrix()

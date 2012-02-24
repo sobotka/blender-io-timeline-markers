@@ -43,12 +43,13 @@ def save_markers(context, filepath): # , y_up, rot_ord):
 
     filehandle = open(filepath, 'w')
     fw = filehandle.write
-   
-        # Write the marker's frame number
-        # fw("%i\r" % marker.frame)
-        
+    
+    for marker in markers:
         # Write the marker's name
-        # fw("%s\t" % marker.name)
+        fw("%s\r" % marker.name)
+        
+        # Write the marker's frame number
+        fw("%i\r" % marker.frame)
 
     # after the whole loop close the file
     filehandle.close()
