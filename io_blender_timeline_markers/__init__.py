@@ -42,7 +42,7 @@ if "bpy" in locals():
 
 
 import bpy
-from bpy.types import Operator
+from bpy.types import Operator, Menu
 from bpy_extras.io_utils import ImportHelper, ExportHelper
 from bpy.props import (StringProperty,
                        BoolProperty,
@@ -64,9 +64,9 @@ from bpy.props import (StringProperty,
 
 
 class ImportMarkers(Operator, ImportHelper):
-    '''Import Blender Timeline Markers from file. '''
-    bl_idname = "import_scene.import_timeline_markers"
-    bl_label = "Import Blender Timeline Markers"
+    '''Import Blender timeline markers from file. '''
+    bl_idname = "marker.export"
+    bl_label = "Import Blender timeline markers from file"
 
     filename_ext = ".bmf"
 
@@ -103,17 +103,11 @@ class ImportMarkers(Operator, ImportHelper):
 
 class ExportMarkers(Operator, ExportHelper):
     '''Export Blender timeline markers to file. '''
-    bl_idname = "export.export_timeline_markers"
-    bl_label = "Export Blender Mimeline Markers"
+    bl_idname = "marker.export"
+    bl_label = "Export Blender timeline markers to file"
 
     filename_ext = ".bmf"
     filter_glob = StringProperty(default="*.bmf", options={'HIDDEN'})
-
-#    y_up = BoolProperty(
-#            name="Make Y up",
-#            description="Switch the Y and Z axis",
-#            default=True)
-#    rotation_order = rotation_order
 
     @classmethod
     def poll(cls, context):
@@ -123,31 +117,29 @@ class ExportMarkers(Operator, ExportHelper):
         from . import export_timeline_markers
         return export_timeline_markers.save_markers(context,
                                           self.filepath)
-#                                           ,self.y_up,
-#                                           self.rotation_order)
 
+class MT_ImportExportMarkers(Menu):
+    bl_label = "Marker Import / Export"
+    bl_idname = "marker_import_export"
 
-def menu_func_import(self, context):
-    self.layout.operator(ImportMarkers.bl_idname, text="Blender Timeline BMF (.bmf)")
+    def draw(self, context):
+        self.layout.operator(ImportMarkers.bl_idname, text="Import Blender BMF (.bmf)")
+        self.layout.operator(ExportMarkers.bl_idname, text="Export Blender BMF (.bmf)")
 
-
-def menu_func_export(self, context):
-    self.layout.operator(ExportMarkers.bl_idname, text="Blender Timeline BMF (.bmf)")
-
+def menu_importexport(self, context):
+    self.layout.menu(MT_ImportExportMarkers.bl_idname)
 
 def register():
     bpy.utils.register_class(ImportMarkers)
     bpy.utils.register_class(ExportMarkers)
-    bpy.types.INFO_MT_file_import.append(menu_func_import)
-    bpy.types.INFO_MT_file_export.append(menu_func_export)
-
+    bpy.utils.register_class(MT_ImportExportMarkers)
+    bpy.types.TIME_MT_marker.append(menu_importexport)
 
 def unregister():
     bpy.utils.unregister_class(ImportMarkers)
     bpy.utils.unregister_class(ExportMarkers)
-    bpy.types.INFO_MT_file_import.remove(menu_func_import)
-    bpy.types.INFO_MT_file_export.remove(menu_func_export)
-
+    bpy.utils.unresister_class(MT_ImportExportMarkers)
+    bpy.types.TIME_MT_marker.remove(menu_importexport)
 
 if __name__ == "__main__":
     register()
