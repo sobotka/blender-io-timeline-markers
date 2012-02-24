@@ -20,6 +20,7 @@
 
 """ This script saves a scene's markers to file."""
 
+import bpy, pickle
 from mathutils import Matrix
 from math import radians, degrees
 
@@ -28,6 +29,8 @@ def save_markers(context, filepath): # , y_up, rot_ord):
 
     # get the active scene and object
     scene = context.scene
+    markers = scene.timeline_markers
+    
 #    obj = context.active_object
 #    camera = obj.data if obj.type == 'CAMERA' else None
 
@@ -40,8 +43,17 @@ def save_markers(context, filepath): # , y_up, rot_ord):
 
     filehandle = open(filepath, 'w')
     fw = filehandle.write
+   
+        # Write the marker's frame number
+        # fw("%i\r" % marker.frame)
+        
+        # Write the marker's name
+        # fw("%s\t" % marker.name)
 
-    # iterate the frames
+    # after the whole loop close the file
+    filehandle.close()
+    
+        # iterate the frames
 #    for frame in range(f_start, f_end + 1, 1):
 
         # set the current frame
@@ -73,8 +85,5 @@ def save_markers(context, filepath): # , y_up, rot_ord):
 #            fw("%f" % vfov)
 
 #        fw("\n")
-
-    # after the whole loop close the file
-    filehandle.close()
 
     return {'FINISHED'}

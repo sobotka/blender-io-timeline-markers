@@ -50,20 +50,20 @@ from bpy.props import (StringProperty,
                        FloatProperty)
 
 # property shared by both operators
-rotation_order = EnumProperty(
-        name="Rotation order",
-        description="Choose the export rotation order",
-        items=(('XYZ', "XYZ", "XYZ"),
-               ('XZY', "XZY", "XZY"),
-               ('YXZ', "YXZ", "YXZ"),
-               ('YZX', "YZX", "YZX"),
-               ('ZXY', "ZXY", "ZXY"),
-               ('ZYX', "ZYX", "ZYX"),
-               ),
-        default='XYZ')
+#rotation_order = EnumProperty(
+#        name="Rotation order",
+#        description="Choose the export rotation order",
+#        items=(('XYZ', "XYZ", "XYZ"),
+#               ('XZY', "XZY", "XZY"),
+#               ('YXZ', "YXZ", "YXZ"),
+#               ('YZX', "YZX", "YZX"),
+#               ('ZXY', "ZXY", "ZXY"),
+#               ('ZYX', "ZYX", "ZYX"),
+#               ),
+#        default='XYZ')
 
 
-class ImportChan(Operator, ImportHelper):
+class ImportMarkers(Operator, ImportHelper):
     '''Import Blender Timeline Markers from file. '''
     bl_idname = "import_scene.import_timeline_markers"
     bl_label = "Import Blender Timeline Markers"
@@ -101,7 +101,7 @@ class ImportChan(Operator, ImportHelper):
 #                                          self.sensor_width,
 #                                          self.sensor_height)
 
-class ExportChan(Operator, ExportHelper):
+class ExportMarkers(Operator, ExportHelper):
     '''Export Blender timeline markers to file. '''
     bl_idname = "export.export_timeline_markers"
     bl_label = "Export Blender Mimeline Markers"
@@ -128,23 +128,23 @@ class ExportChan(Operator, ExportHelper):
 
 
 def menu_func_import(self, context):
-    self.layout.operator(ImportChan.bl_idname, text="Blender Timeline BMF (.bmf)")
+    self.layout.operator(ImportMarkers.bl_idname, text="Blender Timeline BMF (.bmf)")
 
 
 def menu_func_export(self, context):
-    self.layout.operator(ExportChan.bl_idname, text="Blender Timeline BMF (.bmf)")
+    self.layout.operator(ExportMarkers.bl_idname, text="Blender Timeline BMF (.bmf)")
 
 
 def register():
-    bpy.utils.register_class(ImportChan)
-    bpy.utils.register_class(ExportChan)
+    bpy.utils.register_class(ImportMarkers)
+    bpy.utils.register_class(ExportMarkers)
     bpy.types.INFO_MT_file_import.append(menu_func_import)
     bpy.types.INFO_MT_file_export.append(menu_func_export)
 
 
 def unregister():
-    bpy.utils.unregister_class(ImportChan)
-    bpy.utils.unregister_class(ExportChan)
+    bpy.utils.unregister_class(ImportMarkers)
+    bpy.utils.unregister_class(ExportMarkers)
     bpy.types.INFO_MT_file_import.remove(menu_func_import)
     bpy.types.INFO_MT_file_export.remove(menu_func_export)
 

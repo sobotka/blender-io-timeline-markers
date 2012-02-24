@@ -28,6 +28,7 @@ def read_markers(context, filepath): # , z_up, rot_ord, sensor_width, sensor_hei
 
     # get the active object
     scene = context.scene
+    markers = scene.timeline_markers
 #    obj = context.active_object
 #    camera = obj.data if obj.type == 'CAMERA' else None
 
@@ -37,17 +38,19 @@ def read_markers(context, filepath): # , z_up, rot_ord, sensor_width, sensor_hei
     # read the file
     filehandle = open(filepath, 'r')
 
+
+
     # iterate throug the files lines
-    for line in filehandle:
+#    for line in filehandle:
         # reset the target objects matrix
         # (the one from whitch one we'll extract the final transforms)
 #        m_trans_mat = Matrix()
 
         # strip the line
-        data = line.split()
+#        data = line.split()
 
         # test if the line is not commented out
-        if data and not data[0].startswith("#"):
+#        if data and not data[0].startswith("#"):
 
             # set the frame number basing on the chan file
 #            scene.frame_set(int(data[0]))
