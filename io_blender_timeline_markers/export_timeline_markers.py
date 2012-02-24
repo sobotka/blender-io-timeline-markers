@@ -20,71 +20,33 @@
 
 """ This script saves a scene's markers to file."""
 
-import bpy, pickle
-from mathutils import Matrix
-from math import radians, degrees
+import bpy
 
-
-def save_markers(context, filepath): # , y_up, rot_ord):
+def save_markers(context, filepath, selected_only): # , y_up, rot_ord):
 
     # get the active scene and object
     scene = context.scene
     markers = scene.timeline_markers
-    
-#    obj = context.active_object
-#    camera = obj.data if obj.type == 'CAMERA' else None
-
-    # get the range of an animation
-#    f_start = scene.frame_start
-#    f_end = scene.frame_end
-
-    # prepare the correcting matrix
-#    rot_mat = Matrix.Rotation(radians(-90.0), 4, 'X').to_4x4()
 
     filehandle = open(filepath, 'w')
     fw = filehandle.write
     
     for marker in markers:
-        # Write the marker's name
-        fw("%s\r" % marker.name)
-        
-        # Write the marker's frame number
-        fw("%i\r" % marker.frame)
+        if selected_only:
+            if marker.select == True:
+                # Write the marker's name
+                fw("%s\r" % marker.name)       
+
+                # Write the marker's frame number
+                fw("%i\r" % marker.frame)
+        else:
+            # Write the marker's name
+            fw("%s\r" % marker.name)       
+
+            # Write the marker's frame number
+            fw("%i\r" % marker.frame)
 
     # after the whole loop close the file
     filehandle.close()
-    
-        # iterate the frames
-#    for frame in range(f_start, f_end + 1, 1):
 
-        # set the current frame
-#        scene.frame_set(frame)
-
-        # get the objects world matrix
-#        mat = obj.matrix_world.copy()
-
-        # if the setting is proper use the rotation matrix
-        # to flip the Z and Y axis
-#        if y_up:
-#            mat = rot_mat * mat
-
-        # create the first component of a new line, the frame number
-#        fw("%i\t" % frame)
-
-        # create transform component
-#        t = mat.to_translation()
-#        fw("%f\t%f\t%f\t" % t[:])
-
-        # create rotation component
-#        r = mat.to_euler(rot_ord)
-
-#        fw("%f\t%f\t%f\t" % (degrees(r[0]), degrees(r[1]), degrees(r[2])))
-
-        # if the selected object is a camera export vertical fov also
-#        if camera:
-#            vfov = degrees(camera.angle_y)
-#            fw("%f" % vfov)
-
-#        fw("\n")
-
-    return {'FINISHED'}
+    return {"FINISHED"}

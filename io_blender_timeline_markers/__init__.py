@@ -21,9 +21,9 @@
 bl_info = {
     "name": "Blender Timeline Marker Format (.bmf)",
     "author": "Troy James Sobotka",
-    "version": (0,0,1),
+    "version": (1,0,1),
     "blender": (2, 6, 2),
-    "location": "File > Import/Export",
+    "location": "Timeline Marker > Marker Import / Export",
     "description": "Import/Export Blender Timeline Markers",
     "warning": "",
     "wiki_url": "",
@@ -49,20 +49,6 @@ from bpy.props import (StringProperty,
                        EnumProperty,
                        FloatProperty)
 
-# property shared by both operators
-#rotation_order = EnumProperty(
-#        name="Rotation order",
-#        description="Choose the export rotation order",
-#        items=(('XYZ', "XYZ", "XYZ"),
-#               ('XZY', "XZY", "XZY"),
-#               ('YXZ', "YXZ", "YXZ"),
-#               ('YZX', "YZX", "YZX"),
-#               ('ZXY', "ZXY", "ZXY"),
-#               ('ZYX', "ZYX", "ZYX"),
-#               ),
-#        default='XYZ')
-
-
 class ImportMarkers(Operator, ImportHelper):
     '''Import Blender timeline markers from file. '''
     bl_idname = "marker.import"
@@ -72,34 +58,14 @@ class ImportMarkers(Operator, ImportHelper):
 
     filter_glob = StringProperty(default="*.bmf", options={'HIDDEN'})
 
-#    rotation_order = rotation_order
-#    z_up = BoolProperty(
-#            name="Make Z up",
-#            description="Switch the Y and Z axis",
-#            default=True)
-
-#    sensor_width = FloatProperty(
-#            name="Camera sensor width",
-#            description="Imported camera sensor width",
-#            default=32.0)
-
-#    sensor_height = FloatProperty(
-#            name="Camera sensor height",
-#            description="Imported camera sensor height",
-#            default=18.0)
-
     @classmethod
     def poll(cls, context):
-        return True # context.active_object is not None
+        return True
 
     def execute(self, context):
         from . import import_timeline_markers
         return import_timeline_markers.read_markers(context,
                                           self.filepath)
-#                                          ,self.z_up,
-#                                          self.rotation_order,
-#                                          self.sensor_width,
-#                                          self.sensor_height)
 
 class ExportMarkers(Operator, ExportHelper):
     '''Export Blender timeline markers to file. '''
@@ -109,18 +75,23 @@ class ExportMarkers(Operator, ExportHelper):
     filename_ext = ".bmf"
     filter_glob = StringProperty(default="*.bmf", options={'HIDDEN'})
 
+    selected_only = BoolProperty(
+            name="Selected only",
+            description="Export selected markers only",
+            default=False)
+
     @classmethod
     def poll(cls, context):
-        return True # context.active_object is not None
-
+        return True
+        
     def execute(self, context):
         from . import export_timeline_markers
         return export_timeline_markers.save_markers(context,
-                                          self.filepath)
+                                          self.filepath,
+                                          self.selected_only)
 
 class MT_ImportExportMarkers(Menu):
     bl_label = "Marker Import / Export"
-#    bl_idname = "marker_import_export"
 
     def draw(self, context):
         self.layout.operator(ImportMarkers.bl_idname, text="Import Blender BMF (.bmf)")
@@ -138,7 +109,7 @@ def register():
 def unregister():
     bpy.utils.unregister_class(ImportMarkers)
     bpy.utils.unregister_class(ExportMarkers)
-    bpy.utils.unresister_class(MT_ImportExportMarkers)
+    bpy.utils.unregister_class(MT_ImportExportMarkers)
     bpy.types.TIME_MT_marker.remove(menu_importexport)
 
 if __name__ == "__main__":
